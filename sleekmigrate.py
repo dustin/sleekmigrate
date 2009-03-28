@@ -62,6 +62,7 @@ class TigaseCSVExporter(object):
 
     def export(self, user):
         logging.info("Exporting account " + user.jid)
+        w = csv.writer(self.out)
         for rosterEntry in user.rosterEntries:
             if len(rosterEntry.groups) == 0:
                 rosterEntry.groups = ("")
@@ -70,7 +71,8 @@ class TigaseCSVExporter(object):
             if len(rosterEntry.groups) > 1:
                 rosterEntry.groups = (rosterEntry.groups[0])
             for group in rosterEntry.groups:
-                self.out.write("%s,%s,%s,%s,%s,%s\n" % (user.jid, user.password, rosterEntry.jid, rosterEntry.name, rosterEntry.subscription, group))
+                w.writerow([user.jid, user.password, rosterEntry.jid,
+                            rosterEntry.name, rosterEntry.subscription, group])
 
     def finalise(self):
         self.out.close()
